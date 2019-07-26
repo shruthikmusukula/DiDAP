@@ -1,7 +1,7 @@
 /* Hive Table Joins */
 
 /* INNER TABLE JOIN */
-select x.PKEY, p.altitude
+SELECT x.PKEY, p.altitude
 FROM planeTracks p 
 JOIN planetracks_fromxe x
 ON (p.icao = x.icao);
