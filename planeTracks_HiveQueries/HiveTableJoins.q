@@ -1,4 +1,4 @@
-SELECT x.PKEY, p.altitude
+select x.PKEY, p.altitude
 FROM planeTracks p 
 JOIN planetracks_fromxe x
 ON (p.icao = x.icao);
