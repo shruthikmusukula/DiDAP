@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html> 
+<head> 
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8" /> 
+  <title>Google Maps Multiple Markers</title> 
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCsCjcNOyacM0bFhW_plBWg2N_HRXuvRsE"
+type="text/javascript"></script>
+<script src = "http://127.0.0.1:8887/markerclusterer.js"> </script>
+
+</head> 
+<body>
+
+<div id="map" style="width: 1000px; height: 600px;"></div>
+
+  <script type="text/javascript">
+
+    var map = new google.maps.Map(document.getElementById('map'), {
+      zoom: 3,
+      center: new google.maps.LatLng(54.5260, 15.2551),
+      mapTypeId: google.maps.MapTypeId.ROADMAP
+    });
+
+
+  </script>
+</body>
+</html>
