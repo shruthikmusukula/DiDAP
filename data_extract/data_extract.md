@@ -31,37 +31,37 @@ Methods to manipulate strings, including removing the path prefix to a file name
 
 This file includes the main methods for processing files and extracting data. Detailed descriptions of these methods follow.
 
-### init()
+### ```init()```
 Initializes variables required for program
 
-### fileInit(String LoadFile)
+### ```fileInit(String LoadFile)```
 Reads in specified file, checks whether it is of the MST file format, and extracts _image file directory_ (which contains the addresses for every other data field) by converting the byte values to hex.
 
-### imageInit()
+### ```imageInit()```
 Extracts fields relevant to image, as well as right and left channel sonar iamge data.
 
-### metaInit()
+### ```metaInit()```
 Extracts fields relevant to metadata as well as specified data fields, including navigation information and fathometer data.
 
-### fileProcess(String x)
+### ``fileProcess(String x)```
 Given a file input path, extract all data, combine metadata for the same mission, and combine left and right channel image as well as subsequent images within the same mission. 
 
-### saveIm()
+### ```saveIm()```
 Saves image to local disk
 
-### saveMeta()
+### ```saveMeta()```
 Saves metadata as a CSV on the local disk
 
-### getData(String dTag, int Num_Fields) 
+### ```getData(String dTag, int Num_Fields)``` 
 Given the known tag of a data field, as well as the number of subfields, find the location of data in the file using the image file directory and convert from binary.
 
-### getData(String dTag) 
+### ```getData(String dTag)``` 
 Given the known tag of a data field that is less than 4 bytes, convert the value from binary.
 
-### getAddress(String dTag)
+### ```getAddress(String dTag)```
 Uses the image file directory to find the location of a specific data value.
 
-### getChannel2(String dTag)
+### ```getChannel2(String dTag)```
 Given the known tag of channel data, read in image data.
 
 ### Meta Data Methods
