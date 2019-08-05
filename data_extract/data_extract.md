@@ -43,7 +43,7 @@ Extracts fields relevant to image, as well as right and left channel sonar iamge
 ### ```metaInit()```
 Extracts fields relevant to metadata as well as specified data fields, including navigation information and fathometer data.
 
-### ``fileProcess(String x)```
+### ```fileProcess(String x)```
 Given a file input path, extract all data, combine metadata for the same mission, and combine left and right channel image as well as subsequent images within the same mission. 
 
 ### ```saveIm()```
