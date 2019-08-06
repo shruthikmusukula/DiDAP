@@ -2,7 +2,7 @@
 
 This code reads in _Marine Sonar Technology Image File Format_ files, which contain sonar data and other navigational information from unmanned underwater vehicles.
 Furthermore, it uploads the data into a database with a multi-table organization schema.
-The files in this repository include: 
+The files in this directory include: 
 + Constants.java
 + Util.java
 + BLOBInsert.java
