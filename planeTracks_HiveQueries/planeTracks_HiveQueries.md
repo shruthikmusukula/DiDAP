@@ -11,25 +11,25 @@ The files in this repository include:
 + OrderBy.q
 + SelectDistinct.q
 
-## CreatePlaneTracksTable
+### CreatePlaneTracksTable
 
 This file includes the basic schema used for organizing ADSB Exchange Aircraft Data. A MapReduce Job is run as a result of this query to create a table with the specified fields, such as Latitude and Longitude.
 
-## HiveTableJoins
+### HiveTableJoins
 
 This file includes guidelines on the 4 types of table join that can be made using the planeTracks table with unique `ICAO` values.
 
-## LoadOverwrittenCSVData
+### LoadOverwrittenCSVData
 Loading data from a CSV file in the Hadoop Distributed File System (HDFS) into the created `planetracks` Hive table.
 
-## MoreThanOneFieldGroupBy
+### MoreThanOneFieldGroupBy
 Using the `GROUP BY` clause in HiveQL with more than one field and without the use of aggreggate functions.
 
-## OneFieldGroupBy
+### OneFieldGroupBy
 
 Using the `GROUP BY` clause in HiveQL with only one data field and without the use of aggreggate functions.
 
-## OneFieldGroupByAggreggate
+### OneFieldGroupByAggreggate
 
 Using the `GROUP BY` clause in HiveQL with only one data field and the use of the `count(*)` aggreggate function.
 
@@ -39,55 +39,3 @@ Using the `ORDER BY` clause in HiveQL to organize the presented aircraft data fr
 ## SelectDistinct
 Demonstration of the common usage of the `DISTINCT` operator in HiveQL query unique `ICAO` values from the loaded CSV Aircraft Data.
 
-### Array Manipulation Methods
-Array manipulations used throughout the code, including horizonatally joining two arrays and vertically joining two arrays.
-
-### File Manipulation Methods
-Common functions involving input and output to files, including writing data to a CSV, writing data as an image, and creating a list of all files of a specified extension within a directory.
-
-### String Manipulation Methods
-Methods to manipulate strings, including removing the path prefix to a file name and surrounding a string with single quotes.
-
-## Extract
-
-This file includes the main methods for processing files and extracting data. Detailed descriptions of these methods follow.
-
-### ```init()```
-Initializes variables required for program
-
-### ```fileInit(String LoadFile)```
-Reads in specified file, checks whether it is of the MST file format, and extracts _image file directory_ (which contains the addresses for every other data field) by converting the byte values to hex.
-
-### ```imageInit()```
-Extracts fields relevant to image, as well as right and left channel sonar iamge data.
-
-### ```metaInit()```
-Extracts fields relevant to metadata as well as specified data fields, including navigation information and fathometer data.
-
-### ```fileProcess(String x)```
-Given a file input path, extract all data, combine metadata for the same mission, and combine left and right channel image as well as subsequent images within the same mission. 
-
-### ```saveIm()```
-Saves image to local disk
-
-### ```saveMeta()```
-Saves metadata as a CSV on the local disk
-
-### ```getData(String dTag, int Num_Fields)``` 
-Given the known tag of a data field, as well as the number of subfields, find the location of data in the file using the image file directory and convert from binary.
-
-### ```getData(String dTag)``` 
-Given the known tag of a data field that is less than 4 bytes, convert the value from binary.
-
-### ```getAddress(String dTag)```
-Uses the image file directory to find the location of a specific data value.
-
-### ```getChannel2(String dTag)```
-Given the known tag of channel data, read in image data.
-
-### Meta Data Methods
-The remaining methods in this file use a similar process to find the location of data within the image file and converting from binary. 
-
-## SonarProcessing
-
-This file includes the main runner for this program. After finding all of the MSTIFF files in the specified directory, the program will go through the sequence for processing the files individually.
