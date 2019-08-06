@@ -1,6 +1,6 @@
 package util;
 
-public class Constans {
+public class Constants {
 	/**
 	 * Change this to match your file output directory
 	 */
