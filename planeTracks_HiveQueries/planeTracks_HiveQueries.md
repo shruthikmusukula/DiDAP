@@ -17,27 +17,27 @@ This file includes the basic schema used for organizing ADSB Exchange Aircraft D
 
 ## HiveTableJoins
 
-This file includes guidelines on the 4 types of table join that can be made using the planeTracks table with unique ICAO values.
+This file includes guidelines on the 4 types of table join that can be made using the planeTracks table with unique `ICAO` values.
 
 ## LoadOverwrittenCSVData
 Loading data from a CSV file in the Hadoop Distributed File System (HDFS) into the created `planetracks` Hive table.
 
 ## MoreThanOneFieldGroupBy
-Common conversions used in the code, including hex to byte, byte to hex, Julian time to standard time, and float to degrees.
+Using the `GROUP BY` clause in HiveQL with more than one field and without the use of aggreggate functions.
 
 ## OneFieldGroupBy
 
-This file includes basic constants used to run the program, namely input and output directories. 
+Using the `GROUP BY` clause in HiveQL with only one data field and without the use of aggreggate functions.
 
 ## OneFieldGroupByAggreggate
 
-This file includes various utility functions to process and save data. Some of the methods are listed below.
+Using the `GROUP BY` clause in HiveQL with only one data field and the use of the `count(*)` aggreggate function.
 
 ## OrderBy
-Common conversions used in the code, including hex to byte, byte to hex, Julian time to standard time, and float to degrees.
+Using the `ORDER BY` clause in HiveQL to organize the presented aircraft data from a query.
 
 ## SelectDistinct
-Common conversions used in the code, including hex to byte, byte to hex, Julian time to standard time, and float to degrees.
+Demonstration of the common usage of the `DISTINCT` operator in HiveQL query unique `ICAO` values from the loaded CSV Aircraft Data.
 
 ### Array Manipulation Methods
 Array manipulations used throughout the code, including horizonatally joining two arrays and vertically joining two arrays.
