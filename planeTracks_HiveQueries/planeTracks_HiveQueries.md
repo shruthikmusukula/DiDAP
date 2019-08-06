@@ -15,27 +15,27 @@ The files in this repository include:
 
 This file includes the basic schema used for organizing ADSB Exchange Aircraft Data. A MapReduce Job is run as a result of this query to create a table with the specified fields, such as Latitude and Longitude.
 
-### HiveTableJoins
+### ```HiveTableJoins```
 
 This file includes guidelines on the 4 types of table join that can be made using the planeTracks table with unique `ICAO` values.
 
-### LoadOverwrittenCSVData
+### ```LoadOverwrittenCSVData```
 Loading data from a CSV file in the Hadoop Distributed File System (HDFS) into the created `planetracks` Hive table.
 
-### MoreThanOneFieldGroupBy
+### ```MoreThanOneFieldGroupBy```
 Using the `GROUP BY` clause in HiveQL with more than one field and without the use of aggreggate functions.
 
-### OneFieldGroupBy
+### ```OneFieldGroupBy```
 
 Using the `GROUP BY` clause in HiveQL with only one data field and without the use of aggreggate functions.
 
-### OneFieldGroupByAggreggate
+### ```OneFieldGroupByAggreggate```
 
 Using the `GROUP BY` clause in HiveQL with only one data field and the use of the `count(*)` aggreggate function.
 
-## OrderBy
+## ```OrderBy```
 Using the `ORDER BY` clause in HiveQL to organize the presented aircraft data from a query.
 
-## SelectDistinct
+## ```SelectDistinct```
 Demonstration of the common usage of the `DISTINCT` operator in HiveQL query unique `ICAO` values from the loaded CSV Aircraft Data.
 
