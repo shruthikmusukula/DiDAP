@@ -1,7 +1,7 @@
 # Extracting Data from MSTIFF Files
 
 This code reads in _Marine Sonar Technology Image File Format_ files, which contain sonar data and other navigational information from unmanned underwater vehicles.
-The files in this repository include: 
+The files in this directory include: 
 + Constants.java
 + Util.java
 + Extract.java
