@@ -1,4 +1,4 @@
-package dat;
+package data;
 
 import java.io.BufferedWriter;
 import java.io.File;
