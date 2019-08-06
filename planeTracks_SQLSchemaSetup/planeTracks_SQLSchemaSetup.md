@@ -1,40 +1,39 @@
-# Scaling Up with Hive
+# Setting Up a Database Schema in Oracle Database
 
-The hive queries in this directory of the _NavalSonarDataAnalyticsPlatform_ repository, deal with loading collected aircraft data in CSV format. The usage of Hive and the Hadoop ecosystem allows us to scale up and handle the expected data overflow. Over time, this data analytics platform is expected to handle terabytes of data. All contents of this directory are written using HiveQL.
+The queries in this directory of the _NavalSonarDataAnalyticsPlatform_ repository, deal with loading collected aircraft data in CSV format into Oracle Database, as opposed to Hive. The SQL Queries created in this directory set up a two-table schema for handling ADSB Aircraft Data. All contents of this directory are written using SQL.
 The files in this repository include: 
-+ CreatePlaneTracksTable.q
-+ HiveTableJoins.q
-+ LoadOverwrittenCSVData.q
-+ MoreThanOneFieldGroupBy.q
-+ OneFieldGroupBy.q
-+ OneFieldGroupByAggreggate.q
-+ OrderBy.q
-+ SelectDistinct.q
++ ADSB_FULL_SCHEMA_SETUP.sql
++ COPY_TABLE_FOR_USE.sql
++ CREATE_PLOTPOINTS_TABLE.sql
++ CREATE_PRIMARY_KEY_SEQUENCE.sql
++ SELECT_DISTINCT_ICAO.sql
++ SET_PRIMARY_KEYS.sql
++ UPDATE_FOREIGN_KEY_IN_NEW_TABLE.sql
 
-### ```CreatePlaneTracksTable```
+### ```ADSB_FULL_SCHEMA_SETUP```
 
-This file includes the basic schema used for organizing ADSB Exchange Aircraft Data. A MapReduce Job is run as a result of this query to create a table with the specified fields, such as Latitude and Longitude.
+This file includes one large compiled SQL File to perform all the operations of the following files.
 
-### ```HiveTableJoins```
+### ```COPY_TABLE_FOR_USE```
 
-This file includes guidelines on the 4 types of table join that can be made using the planeTracks table with unique `ICAO` values.
+This file contains a copy of the organized table with set foreign and primary keys for production use. 
 
-### ```LoadOverwrittenCSVData```
-Loading data from a CSV file in the Hadoop Distributed File System (HDFS) into the created `planetracks` Hive table.
+### ```CREATE_PLOTPOINTS_TABLE```
 
-### ```MoreThanOneFieldGroupBy```
-Using the `GROUP BY` clause in HiveQL with more than one field and without the use of aggreggate functions.
+Uses sequence to create a table with unique and separated `ICAO`field values.
 
-### ```OneFieldGroupBy```
+### ```CREATE_PRIMARY_KEY_SEQUENCE```
 
-Using the `GROUP BY` clause in HiveQL with only one data field and without the use of aggreggate functions.
+Creates a sequence in SQL for assigning primary keys to each `ICAO` field value.
 
-### ```OneFieldGroupByAggreggate```
+### ```SELECT_DISTINCT_ICAO```
 
-Using the `GROUP BY` clause in HiveQL with only one data field and the use of the `count(*)` aggreggate function.
+Creates a new table to host all distinct `ICAO` field values using the `DISTINCT` SQL operator.
 
-### ```OrderBy```
-Using the `ORDER BY` clause in HiveQL to organize the presented aircraft data from a query.
+### ```SET_PRIMARY_KEYS```
 
-### ```SelectDistinct```
-Demonstration of the common usage of the `DISTINCT` operator in HiveQL query unique `ICAO` values from the loaded CSV Aircraft Data.
+Uses the `UPDATE` SQL Command to assign a generated primary key from the sequence above to a unique `ICAO` field value.
+
+### ```UPDATE_FOREIGN_KEY_IN_NEW_TABLE```
+
+Adds the foreign key constraint to the `PLANETRACKS` table to create connection to `PLOTPOINTS` table.
