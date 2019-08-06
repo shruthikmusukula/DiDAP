@@ -1,4 +1,4 @@
-package data;
+package dat;
 
 import java.io.File;
 import java.io.FileInputStream;
