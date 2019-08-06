@@ -33,9 +33,9 @@ Using the `GROUP BY` clause in HiveQL with only one data field and without the u
 
 Using the `GROUP BY` clause in HiveQL with only one data field and the use of the `count(*)` aggreggate function.
 
-## ```OrderBy```
+### ```OrderBy```
 Using the `ORDER BY` clause in HiveQL to organize the presented aircraft data from a query.
 
-## ```SelectDistinct```
+### ```SelectDistinct```
 Demonstration of the common usage of the `DISTINCT` operator in HiveQL query unique `ICAO` values from the loaded CSV Aircraft Data.
 
