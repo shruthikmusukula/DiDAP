@@ -1,6 +1,6 @@
 # Setting Up a Database Schema in Oracle Database
 
-The queries in this directory of the _NavalSonarDataAnalyticsPlatform_ repository, deal with loading collected aircraft data in CSV format into Oracle Database, as opposed to Hive. The SQL Queries created in this directory set up a two-table schema for handling ADSB Aircraft Data. All contents of this directory are written using SQL.
+The queries in this directory of the _NavalSonarDataAnalyticsPlatform_ repository, deal with loading collected aircraft data in CSV format into Oracle Database, as opposed to Hive. The queries created in this directory set up a two-table schema for handling ADSB Aircraft Data. All contents of this directory are written using SQL.
 The files in this repository include: 
 + ADSB_FULL_SCHEMA_SETUP.sql
 + COPY_TABLE_FOR_USE.sql
