@@ -1,11 +1,15 @@
-# Extracting Data from MSTIFF Files
+# Scaling Up with Hive
 
-This code reads in _Marine Sonar Technology Image File Format_ files, which contain sonar data and other navigational information from unmanned underwater vehicles.
+The hive queries in this directory of the _NavalSonarDataAnalyticsPlatform_ repository, deal with loading collected aircraft data in CSV format. The usage of Hive and the Hadoop ecosystem allows us to scale up and handle the expected data overflow. Over time, this data analytics platform is expected to handle terabytes of data.
 The files in this repository include: 
-+ Constants.java
-+ Util.java
-+ Extract.java
-+ SonarProcessing.java
++ CreatePlaneTracksTable.q
++ HiveTableJoins.q
++ LoadOverwrittenCSVData.q
++ MoreThanOneFieldGroupBy.q
++ OneFieldGroupBy.q
++ OneFieldGroupByAggreggate.q
++ OrderBy.q
++ SelectDistinct.q
 
 ## Constants
 
