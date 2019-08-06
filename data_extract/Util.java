@@ -1,4 +1,4 @@
-package util;
+package uti;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
@@ -82,7 +82,7 @@ public class Util {
 		float sec = min * 60;
 		min = (sec - sec % 60) / 60;
 		sec = sec - min * 60;
-		String Degree_Min_Sec = degree + "°" + min + "'" + sec + "''";
+		String Degree_Min_Sec = degree + "Â°" + min + "'" + sec + "''";
 		return Degree_Min_Sec;
 	}
 
