@@ -1,6 +1,6 @@
 # Scaling Up with Hive
 
-The hive queries in this directory of the _NavalSonarDataAnalyticsPlatform_ repository, deal with loading collected aircraft data in CSV format. The usage of Hive and the Hadoop ecosystem allows us to scale up and handle the expected data overflow. Over time, this data analytics platform is expected to handle terabytes of data.
+The hive queries in this directory of the _NavalSonarDataAnalyticsPlatform_ repository, deal with loading collected aircraft data in CSV format. The usage of Hive and the Hadoop ecosystem allows us to scale up and handle the expected data overflow. Over time, this data analytics platform is expected to handle terabytes of data. All contents of this directory are written using HiveQL.
 The files in this repository include: 
 + CreatePlaneTracksTable.q
 + HiveTableJoins.q
@@ -11,15 +11,32 @@ The files in this repository include:
 + OrderBy.q
 + SelectDistinct.q
 
-## Constants
+## CreatePlaneTracksTable
+
+This file includes the basic schema used for organizing ADSB Exchange Aircraft Data. A MapReduce Job is run as a result of this query to create a table with the specified fields, such as Latitude and Longitude.
+
+## HiveTableJoins
+
+This file includes guidelines on the 4 types of table join that can be made using the planeTracks table with unique ICAO values.
+
+## LoadOverwrittenCSVData
+Loading data from a CSV file in the Hadoop Distributed File System (HDFS) into the created `planetracks` Hive table.
+
+## MoreThanOneFieldGroupBy
+Common conversions used in the code, including hex to byte, byte to hex, Julian time to standard time, and float to degrees.
+
+## OneFieldGroupBy
 
 This file includes basic constants used to run the program, namely input and output directories. 
 
-## Util
+## OneFieldGroupByAggreggate
 
 This file includes various utility functions to process and save data. Some of the methods are listed below.
 
-### Conversion Methods
+## OrderBy
+Common conversions used in the code, including hex to byte, byte to hex, Julian time to standard time, and float to degrees.
+
+## SelectDistinct
 Common conversions used in the code, including hex to byte, byte to hex, Julian time to standard time, and float to degrees.
 
 ### Array Manipulation Methods
