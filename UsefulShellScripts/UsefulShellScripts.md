@@ -1,4 +1,4 @@
-# Setting Up a Database Schema in Oracle Database
+# Additional Scripts
 
 The script files in this repository were made for aiding the user experience in either developing or using the constructed Data Anaytics Platform. The files in this repository include: 
 + HDFS_Transfer.sh
