@@ -2,8 +2,8 @@ package DataStorage;
 
 public class LightPoint extends Point {
 
-	public double lum;
-	public boolean blink;
+	/** luminescence*/ public double lum;
+	/** whether lum == 1 */ public boolean blink;
 	public int tag;
 	public Centroid cen;
 	
@@ -13,6 +13,6 @@ public class LightPoint extends Point {
 		
 		this.lum = lum;
 		
-		blink = lum == 1 ? true : false;
+		blink = lum == 1;
 	}
 }

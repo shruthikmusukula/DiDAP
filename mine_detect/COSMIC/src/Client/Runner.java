@@ -15,18 +15,15 @@ public class Runner {
 	public static void main(String[] args) throws IOException {
 
 		System.out.println("start");
-		test();
+		slide("imageim4.png");
 	}
 	
 	public static void test() throws IOException {
-		FrameProcess.Master.findMine("bigpapa.png", true);
+		FrameProcess.Master.findMine("", true);
 //		FrameProcess.Master.findMine("sonar3.png", true);
 	}
 	
-	public static void slide() throws IOException {
-		
-		String file = "bigpapa.png";
-		
+	public static void slide(String file) throws IOException {
 		MacroProcess.Master.findMine(file);
 	}
 	

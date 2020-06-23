@@ -5,6 +5,10 @@ import java.io.IOException;
 import Function.Format;
 import GUI.Window;
 
+/**
+ * Main class for large images
+ *
+ */
 public class Master {
 
 	static String file;
@@ -45,15 +49,11 @@ public class Master {
 		bmap = new boolean[layers[0].length][layers[0][0].length];
 		for (int r = 0; r < bmap.length; r++)
 			for (int c = 0; c < bmap[0].length; c++)
-				bmap[r][c] = layers[0][r][c] && layers[1][r][c] ? true : false;
+				bmap[r][c] = layers[0][r][c] && layers[1][r][c];
 		
 		Window.create("Slide", file, Format.slideArea(bmap, Slide.vals, Slide.dim), 1, 1);
 		
-		for (boolean[] row : bmap)
-			for (boolean b : row)
-				if (b) return true;
-		
-		return false;
+		return Function.Calc.containsTrue(bmap);
 	}
 	
 	public static void init(String fileSet) {

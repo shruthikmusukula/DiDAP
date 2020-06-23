@@ -2,20 +2,32 @@ package FrameProcess;
 
 import DataStorage.*;
 
+/**
+ * Identifies clusters of specified colors 
+ *
+ */
 public class Sift {
 
 	public static LightPoint[][] map;
 	
 	static int cenN;
 	
-	// initializes variables
+	/**
+	 * initializes variables
+	 * @param mapSet
+	 * @param cenNSet
+	 */
 	public static void init(LightPoint[][] mapSet, int cenNSet) {
 		
 		map = mapSet;
 		cenN = cenNSet;
 	}
 	
-	// selects a certain color and removes the rest
+	/**
+	 * selects a certain color and removes the rest
+	 * @param select
+	 * @return map
+	 */
 	public static LightPoint[][] colorSelect(int select) {
 		
 		for (int r = 0; r < map.length; r++)
@@ -34,7 +46,11 @@ public class Sift {
 		return map;
 	}*/
 	
-	// returns the tag of the Centroid with the most black (the tag indicates the color)
+	/**
+	 * finds darkest centroid
+	 * tag returned indicates color
+	 * @return tag of the Centroid with the most black
+	 */
 	public static int maxColor() {
 		
 		double[] areas = new double[cenN];

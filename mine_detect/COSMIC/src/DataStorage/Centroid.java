@@ -2,7 +2,7 @@ package DataStorage;
 
 public class Centroid extends Point {
 
-	public double lum;
+	/** luminescence */ public double lum;
 	
 	public int tag;
 	
