@@ -16,6 +16,8 @@ COSMIC uses an ensemble of algorithms in order to identify dark and bright spots
 
 ![Mine Detection](Capture.PNG)
 
+The integrated, working version of the code to extract MSTIFF data and label mines is located in the **extract_detect** folder.
+
 ### Scaling Up:
 While the algorithms described thus far effectively extract relevant data and identify potential mines, each step of processing the individual files is time consuming. Finding ways to more efficiently handle large volumes of data is central to providing a feasible alternative to the vendor software and manual location of mines. To manage large quantities of data, one useful software framework is Hadoop, an open-source framework for storing data and running applications on clusters of commodity hardware. It provides massive storage for any kind of data and enormous processing power, which allows for parallel computation and provides the building blocks for hosting DiDAP.
 Apache Hive is a distributed data warehouse system that enables data analytics at a massive scale, another system that ties in with the intent of “scaling up” the sonar processing algorithms. Hive is built on top of and closely integrated with Hadoop, designed to work quickly on petabytes of data. Hive is unique in that it provides batch processing to work quickly across extensive collections of data queried from a distributed storage system. Apache Sqoop is another part of the Hadoop ecosystem, which provides the tools for the efficient transfer of data from Hadoop to a relational database, and vice versa. With DiDAP, data is stored within the Hadoop architecture using Hive and accessed in batches through an Oracle Database with Sqoop.
