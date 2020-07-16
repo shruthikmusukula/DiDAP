@@ -16,7 +16,7 @@ import Image.ImageArrEdit;
 import MacroProcess.Slide;
 
 /**
- * @author Seth Knoop, Pyojeong Kim, Mitali Chowdhury
+ * @author Seth Knoop, Mitali Chowdhury, Kaylin Li, Nancy Daoud, Pyojeong Kim
  *
  */
 
