@@ -31,9 +31,10 @@ public class Slide {
 		dim = dimSet;
 		dark = darkSet;
 
-		bmap = new boolean[(int) Math.ceil(1.0 * vals.length / dim)][(int) Math.ceil(1.0 * vals[0].length / dim)];
+		bmap = new boolean[(int) Math.ceil(1.0 * vals.length / dim) * 2
+				- 1][(int) Math.ceil(1.0 * vals[0].length / dim) * 2 - 1];
 	}
-	
+
 	/**
 	 * Initialize slide
 	 * 
@@ -46,7 +47,7 @@ public class Slide {
 	 * @throws IOException
 	 */
 	public static void init(double[][] valSet, int dimSet, boolean darkSet) {
-		
+
 		dim = dimSet;
 		dark = darkSet;
 		vals = valSet;
@@ -59,9 +60,12 @@ public class Slide {
 	 */
 	public static void process() {
 
-		for (int r = 0; r < bmap.length; r++)
-			for (int c = 0; c < bmap[0].length; c++)
-				bmap[r][c] = Master.findMine(findSector(r, c), dark);
+		for (int r = 0; r < bmap.length; r++) {
+			for (int c = 0; c < bmap[0].length; c++) {
+				if (c == 0) bmap[r][c] = false;
+				else bmap[r][c] = Master.findMine(findSector(r / 2.0, c / 2.0), dark);
+			}
+		}
 	}
 
 	/**
@@ -73,13 +77,13 @@ public class Slide {
 	 *            column
 	 * @return array with values from sector
 	 */
-	public static double[][] findSector(int r, int c) {
+	public static double[][] findSector(double r, double c) {
 
 		double[][] send = new double[refit(r, true)][refit(c, false)];
 
 		for (int i = 0; i < send.length; i++)
 			for (int j = 0; j < send[0].length; j++)
-				send[i][j] = vals[r * dim + i][c * dim + j];
+				send[i][j] = vals[(int) Math.round(r * dim + i)][(int) Math.round(c * dim + j)];
 
 		return send;
 	}
@@ -92,10 +96,10 @@ public class Slide {
 	 * @param row
 	 * @return
 	 */
-	public static int refit(int n, boolean row) {
+	public static int refit(double n, boolean row) {
 
 		int limit = row ? vals.length : vals[0].length;
 
-		return (n + 1) * dim > limit ? limit - n * dim : dim;
+		return (int) Math.round(n + 1) * dim > limit ? (int) Math.round(limit - n * dim) : dim;
 	}
 }

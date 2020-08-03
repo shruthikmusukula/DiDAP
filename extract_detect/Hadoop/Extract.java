@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.util.Arrays;
 
 /**
- * Hadoop with MapReduce, image only version
+ * Extracts image and metadata from MSTIFF 
  *
  */
 public class Extract { 
@@ -63,7 +63,8 @@ public class Extract {
 	private static long[] Fatho_timestamp_sec;
 
 	// Save
-	public static byte[][] imTemp;
+	public static byte[][] imTempR;
+	public static byte[][] imTempL;
 	public static String[][] metaTemp;
 	private static String lastFile;
 	
@@ -98,7 +99,8 @@ public class Extract {
 		fileHeader[0][6] = "WaterDepth";
 		fileHeader[0][7] = "TowfishDepth";
 
-		imTemp = new byte[0][0];
+		imTempR = new byte[0][0];
+		imTempL = new byte[0][0];
 		metaTemp = new String[0][0];
 		lastFile = "empty";
 		count = 0;
@@ -225,7 +227,7 @@ public class Extract {
 		Extract.metaInit();
 
 		// Check if first
-		if (imTemp == null)
+		if (imTempR == null)
 			init();
 
 		// Save if last of mission
@@ -254,14 +256,15 @@ public class Extract {
 		}
 
 		// Combine left and right channels, previous image
-		if (imTemp.length != 0) {
-			imTemp = Util.combineVertically(imTemp, Util.combineHorizontally(left, right));
+		if (imTempR.length != 0) {
+			imTempR = Util.combineVertically(imTempR, right);
+			imTempL = Util.combineVertically(imTempL, left);
 			saveIm();
-			System.out.println("saveIm should have ran");
-			imTemp = Util.combineHorizontally(left, right);
+			imTempR = right;
+			imTempL = left;
 		} else {
-			System.out.println("saveIm should have ran");
-			imTemp = Util.combineHorizontally(left, right);
+			imTempR = right;
+			imTempL = left;
 		}
 
 		// Add metadata to growing table
@@ -278,8 +281,7 @@ public class Extract {
 	 * Save image
 	 */
 	public static void saveIm() {
-		Util.saveIm(imTemp, "im" + count, false);
-		System.out.println("saveIm" + count);
+		Util.saveIm(Util.combineHorizontally(imTempL, imTempR), "im" + count, false);
 		count++;
 	}
 
@@ -287,8 +289,9 @@ public class Extract {
 	 * Save metadata as CSV
 	 */
 	public static void saveMeta() throws IOException {
-//		Util.saveIm(imTemp, "im" + count);
-		imTemp = new byte[0][0];
+//		Util.saveIm(imTempR, "im" + count);
+		imTempR = new byte[0][0];
+		imTempL = new byte[0][0];
 		String tempLabel = Util.remPath(lastFile);
 		Util.save(metaTemp, tempLabel + "META");
 		metaTemp = new String[0][0];
