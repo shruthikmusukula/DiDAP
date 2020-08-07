@@ -11,12 +11,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
-* <h1>MSTIFF Extraction Servlet</h1>
-* Kicks off a Hadoop job via a shell script defined in mstiff.sh
-* that parses through *.mst input files and extracts the important data
-* required for the DiDAP Platform.
+* <h1>Oracle Data Transfer Servlet Servlet</h1>
+* Kicks off a Sqoop job to transfer data from the existing Hive table
+* to a table created by a DB Administrator on the Oracle DB Instance.
+* IP Address in the script must be updated from time to time unless using a static IP.
 */
-public class MstiffExtraction extends HttpServlet {
+public class OracleDataTransfer extends HttpServlet {
 
 	/**
 	   * This method is used to allow the servlet to support HTTP GET requests. 
@@ -39,7 +39,7 @@ public class MstiffExtraction extends HttpServlet {
         out.println("<head>");
         out.println("<meta charset=\"UTF-8\" />");
 
-        String title = "MSTIFF Extraction";
+        String title = "Sqoop Transfer";
 
         // sets title in tab of browser to display the following text
         out.println("<title>" + title + "</title>");
@@ -48,8 +48,8 @@ public class MstiffExtraction extends HttpServlet {
 
         out.println("<h1>" + title + " Job Status:</h1>\n"); // Page Header
         
-        // Builds command to run shell script in provided filepath
-		String[] command = {"/bin/bash", "/usr/share/tomcat/webapps/didap/WEB-INF/scripts/mstiff.sh"};
+        /*// Builds command to run shell script in provided filepath
+		String[] command = {"/bin/bash", "/usr/share/tomcat/webapps/didap/WEB-INF/scripts/OracleSqoopTransfer.sh"};
         ProcessBuilder p = new ProcessBuilder(command);
         Process p2 = p.start();
         try {
@@ -66,10 +66,23 @@ public class MstiffExtraction extends HttpServlet {
 		out.println("Output of running " + Arrays.toString(command) + " is: ");
         while ((line = br.readLine()) != null) {
         	out.println(line + "\n");
-        }
-        out.println("\n");
+        }*/
+        
+        SqoopOptions options = new SqoopOptions();
+        options.setConnectString("jdbc:mysql://HOSTNAME:PORT/DATABASE_NAME");
+        //options.setTableName("TABLE_NAME");
+        //options.setWhereClause("id>10");     // this where clause works when importing whole table, ie     when setTableName() is used
+        options.setUsername("USERNAME");
+        options.setPassword("PASSWORD");
+        //options.setDirectMode(true);    // Make sure the direct mode is off when importing data to HBase
+        options.setNumMappers(8);         // Default value is 4
+        options.setSqlQuery("SELECT * FROM user_logs WHERE $CONDITIONS limit 10");
+        options.setSplitByCol("log_id");
+
+        int ret = new ImportTool().run(options);
+        
+        out.println("Data moved to oracle");
         out.println("</body>");
         out.println("</html>");
     }
 }
-

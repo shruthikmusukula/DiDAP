@@ -16,12 +16,21 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+/**
+* <h1>Metadata Table Creation Servlet</h1>
+* Loads the data from HDFS into a Hive table.
+* Table must be pre-created my DB Admin.
+*/
 public class MetadataTableCreation extends HttpServlet {
 	private Connection conn;
 	private Statement stmt;
 	private boolean connEstablished = false;
 	private PrintWriter out;
 	
+	/**
+	   * This method is used to establish the DB connection in Hive
+	   * and handles the appropriate exception when an error occurs.
+	   */
 	public void DBinit() {
 		if (!connEstablished) {
 			try {
@@ -35,8 +44,8 @@ public class MetadataTableCreation extends HttpServlet {
 			
 			try {
 				// Establish connection
-				String url = "jdbc:hive://localhost:10000/metadata";
-				conn = DriverManager.getConnection(url, "", "");
+				String url = "jdbc:hive://localhost:10000/metadata"; // metadata is the database name within local Hive instance
+				conn = DriverManager.getConnection(url, "", ""); // no authentication needed for Hive Server 1 access
 				out.println("Connected to Database!");
 
 				// Create statement
@@ -49,7 +58,11 @@ public class MetadataTableCreation extends HttpServlet {
 		}
 	}
 	
-	public void createTable(String tableName) {
+	/**
+	   * This method is used to create the metadata table schema using user input
+	   * for the proper table name.
+	   */
+	/*public void createTable(String tableName) {
 		if (connEstablished) {
 			try {
 				String query = "";
@@ -67,8 +80,11 @@ public class MetadataTableCreation extends HttpServlet {
 				out.println("Query Failed!!");
 			}
 		}
-	}
+	}*/
 	
+	/**
+	   * This method is used to handle any DDL related query, aka CREATE, LOAD, INSERT, etc.
+	   */
 	public void DBExecuteQuery(String query) {
 		if (connEstablished) {
 			try {
@@ -81,6 +97,9 @@ public class MetadataTableCreation extends HttpServlet {
 		}
 	}
 
+	/**
+	   * This method closed the DB Connection once the program has completed execution
+	   */
 	public void DBfinish() {
 		if (connEstablished) {
 			out.println("Connection Closed.");
@@ -94,6 +113,14 @@ public class MetadataTableCreation extends HttpServlet {
 		}
 	}
 
+	/**
+	   * This method is used to allow the servlet to support HTTP GET requests. 
+	   * This means simply requesting to see the following servlet or webpage via a link.
+	   * @param request object that contains the request the client has made of the servlet.
+	   * @param response object that contains the response the servlet sends to the client.
+	   * @exception IOException some sort of input or output error while the GET request is handled.
+	   * @exception ServletException thrown when servlet encounters difficulty handling the GET request.
+	   */
     @Override
     public void doGet(HttpServletRequest request,
                       HttpServletResponse response)
@@ -115,18 +142,19 @@ public class MetadataTableCreation extends HttpServlet {
         out.println("<body bgcolor=\"white\">");
 
         out.println("<h1>" + title + " Status:</h1>\n");
-		out.println("Metadata Table Data Being Loaded from HDFS:");
-		
-		// Create DB Connection
+        out.println("Metadata Table Data Being Loaded from HDFS:");
+        
+        // Create DB Connection
         DBinit();
-
-		// Create Actual Table
-		//createTable("florida");
-		
-		// Display HDFS Data
-        String query = "LOAD DATA INPATH '/user/cloudera/successfulOutput_fullScript/part-m-00000' OVERWRITE INTO TABLE florida";
-		DBExecuteQuery(query);
-		
+        
+        // Load HDFS Data
+        //String query = "LOAD DATA INPATH '/user/cloudera/successfulOutput_fullScript/part-m-00000' OVERWRITE INTO TABLE florida";
+        String query = "LOAD DATA INPATH '/user/cloudera/" + request.getParameter("directory_name") + "/part-m-00000' OVERWRITE INTO TABLE florida";
+        
+        DBExecuteQuery(query);
+        
+        out.println("Table created!");
+        
         out.println("</body>");
         out.println("</html>");
         

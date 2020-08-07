@@ -49,7 +49,7 @@ public class MstiffExtraction extends HttpServlet {
         out.println("<h1>" + title + " Job Status:</h1>\n"); // Page Header
         
         // Builds command to run shell script in provided filepath
-		String[] command = {"/bin/bash", "/usr/share/tomcat/webapps/didap/WEB-INF/scripts/mstiff.sh"};
+		String[] command = {"/bin/bash", "/usr/share/tomcat/webapps/didap/WEB-INF/scripts/mstiff.sh " + request.getParameter("directory_name")};
         ProcessBuilder p = new ProcessBuilder(command);
         Process p2 = p.start();
         try {
@@ -62,14 +62,20 @@ public class MstiffExtraction extends HttpServlet {
         // Builds output to display to user from shell script
         BufferedReader br = new BufferedReader(new InputStreamReader(p2.getInputStream()));
         String line;
+        //String statusDisplay;
         
 		out.println("Output of running " + Arrays.toString(command) + " is: ");
         while ((line = br.readLine()) != null) {
         	out.println(line + "\n");
+        	// statusDisplay = line;  ignores long, unneccesary output from jar compilation steps
         }
         out.println("\n");
+        // prints last line in input which is job status, either a 1 or 0 for a failure of success, respectively
+        out.println("\n" + "Folder named " + request.getParameter("directory_name") +  " was created");
+
         out.println("</body>");
         out.println("</html>");
     }
 }
+
 

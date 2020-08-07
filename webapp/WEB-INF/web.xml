@@ -4,23 +4,31 @@
     <servlet-class>HelloWorld</servlet-class>
   </servlet>
   <servlet>
+    <servlet-name>MSTIFF_Extraction</servlet-name>
+    <servlet-class>MstiffExtraction</servlet-class>
+  </servlet>
+  <servlet>
     <servlet-name>MetadataTableCreation</servlet-name>
     <servlet-class>MetadataTableCreation</servlet-class>
   </servlet>
   <servlet>
-    <servlet-name>MSTIFF_Extraction</servlet-name>
-    <servlet-class>MstiffExtraction</servlet-class>
+    <servlet-name>OracleDataTransfer</servlet-name>
+    <servlet-class>OracleDataTransfer</servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>HelloWorld</servlet-name>
     <url-pattern>/HelloWorld</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
+    <servlet-name>MSTIFF_Extraction</servlet-name>
+    <url-pattern>/MSTIFF_Extraction</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
     <servlet-name>MetadataTableCreation</servlet-name>
     <url-pattern>/MetadataTableCreation</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
-    <servlet-name>MSTIFF_Extraction</servlet-name>
-    <url-pattern>/MSTIFF_Extraction</url-pattern>
+    <servlet-name>OracleDataTransfer</servlet-name>
+    <url-pattern>/OracleDataTransfer</url-pattern>
   </servlet-mapping>
 </web-app>
