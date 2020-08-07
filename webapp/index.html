@@ -1,13 +1,117 @@
-<!DOCTYPE HTML><html lang="en"><head>
-<meta charset="UTF-8">
-<title>DiDAP Job Monitor</title>
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>DiDAP Job Monitor</title>
 </head>
-<body>
-<p>
-<h2>DiDAP Job Monitor</h2>
-<ul>
-<li><a href="MetadataTableCreation">Moving Extracted Data to Hive</a></li>
-<li><a href="MSTIFF_Extraction">Compile and Run MSTIFF Extraction Code</a></li>
-</ul>
-</body></html>
 
+<link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
+
+<style type="text/css">
+	.tg  {
+	  border-collapse:collapse;
+	  border-spacing:0;
+	}
+	.tg td {
+	  border-color:black;
+	  border-style:solid;
+	  border-width:1px;
+	  font-family:Roboto, sans-serif;
+	  font-size:18px;
+	  overflow:hidden;padding:15px 5px;word-break:normal;
+	}
+	.tg th {
+	  border-color:black;
+	  border-style:solid;
+	  border-width:1px;
+	  font-family:Roboto, sans-serif;
+	  font-size:18px;
+	  font-weight:normal;
+	  overflow:hidden;
+	  padding:20px 5px;
+	  word-break:normal;
+	}
+	.tg .tg-0lax {
+	  text-align:left;
+	  vertical-align:top
+	}
+
+	#t01 th {
+	  background-color: black;
+	  color: white;
+	}
+	#t01 tr:nth-child(even) {
+	  background-color: #eee;
+	}
+	#t01 tr:nth-child(odd) {
+	 background-color: #fff;
+	}
+
+	.button {
+          color: #494949 !important;
+	  text-decoration: none;
+	  background: #ffffff;
+	  padding: 5px;
+	  border: 2px solid #494949 !important;
+	  display: inline-block;
+	  transition: all 0.4s ease 0s;
+        }
+	.button:hover {
+	  color: #ffffff !important;
+	  background-color: #7aa8b7;
+	  border-color: #7aa8b7 !important;
+	  transition: all 0.2s ease 0s;
+	}
+</style>
+
+<body>
+	<p>
+	<h1 style="font-family:Roboto, sans-serif;">DiDAP Job Monitor</h1>
+
+	<table class="tg" id="t01">
+	<caption style="font-family:Roboto, sans-serif;font-size:24px;"><b>Servlet Job Organization</b></caption>
+	<thead>
+	  <tr>
+	    <th class="tg-0lax">Task Name</th>
+	    <th class="tg-0lax">Execute Servlet Button</th>
+	  </tr>
+	</thead>
+	<tbody>
+	  <tr>
+	    <td>Simple Hello World Servlet</td>
+	    <td>
+	      <form action="HelloWorld" method="GET">
+	      <label for="data">Name:</label><br>
+	      <input type="text" id="data" name="data">
+	      <input class="button" type="submit" value="Hello World Test">
+	      </form>
+	    </td>
+	  </tr>
+	  <tr>
+	    <td>Compile and Run MSTIFF Extraction Hadoop Job</td>
+	    <td>
+	      <form action="MSTIFF_Extraction" method="GET">
+	      <!--<label for="data">HDFS Output Folder Name:</label><br>
+	      <input type="text" id="directory_name" name="directory_name">-->
+	      <input class="button" type="submit" value="Extraction Job">
+	      </form>
+	    </td>
+	  </tr>
+	  <tr>
+	    <td>Moving Extracted Data to Hive</td>
+	    <td>
+	      <form action="MetadataTableCreation" method="GET">
+	      <label for="data">HDFS Output Folder Name (Same as Above):</label><br>
+	      <input type="text" id="directory_name" name="directory_name">
+	      <input class="button" type="submit" value="Move to Hive">
+	      </form>
+	    </td>
+	  </tr>
+	  <tr>
+	    <td>Moving Extracted Data to From Hive to Oracle DB Instance</td>
+	    <td><a href="OracleDataTransfer" class="button">Move to Oracle</a></td>
+	  </tr>
+	</tbody>
+	</table>
+</body>
+</html>
