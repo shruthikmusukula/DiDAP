@@ -26,7 +26,7 @@ public class Extract {
 	private static int BinsPerChannel;
 
 	// Metadata
-	private static int Num_Meta_Fields = 7;
+	private static int Num_Meta_Fields = 9;
 	// Y2K timestamp
 	private static int Y2K_Address;
 	private static long Y2K_timestamp = 0;
@@ -48,6 +48,12 @@ public class Extract {
 	private static float[] Nav_Long;
 	private static byte[] Nav_Long_byte_tmp = new byte[4];
 	private static int Nav_Long_tmp;
+	private static float[] Nav_SOG; // Speed over ground (SOG) in knots
+	private static byte[] Nav_SOG_byte_tmp = new byte[4];
+	private static int Nav_SOG_tmp;
+	private static float[] Nav_COG; // Course over ground (COG) in degrees
+	private static byte[] Nav_COG_byte_tmp = new byte[4];
+	private static int Nav_COG_tmp;
 	private static int Nav_Real_Count = 0;
 	// Fathometer info
 	private static int Fatho_Address;
@@ -61,11 +67,17 @@ public class Extract {
 	private static byte[] Fatho_TowfishDepth_byte_tmp = new byte[4];
 	private static int Fatho_TowfishDepth_tmp;
 	private static long[] Fatho_timestamp_sec;
+	// info from SonarDataInfo3
+	private static int SDInfo_Address;
+	private static long[] SDInfo_RangeCode; 
+	private static byte[] SDInfo_RangeCode_byte_tmp = new byte[4];
+	public static int[] SDInfo_RangeMode;
 
 	// Save
 	public static byte[][] imTempR;
 	public static byte[][] imTempL;
 	public static String[][] metaTemp;
+	public static String[][] SDInfoData;
 	private static String lastFile;
 	
 	public static int count;
@@ -87,9 +99,9 @@ public class Extract {
 	 * @return succesful
 	 */
 	public static boolean init() {
-		fileHeader = new String[1][8];
+		fileHeader = new String[1][Num_Meta_Fields + 1];
 		// Creates file header as
-		// "Filename Date NavTime FaTime Lat Long WaterDepth TowfishDepth "
+		// "Filename Date NavTime FaTime Lat Long WaterDepth TowfishDepth CourseOverGround "
 		fileHeader[0][0] = "Filename";
 		fileHeader[0][1] = "Date";
 		fileHeader[0][2] = "NavTime";
@@ -98,6 +110,8 @@ public class Extract {
 		fileHeader[0][5] = "Longitude";
 		fileHeader[0][6] = "WaterDepth";
 		fileHeader[0][7] = "TowfishDepth";
+		fileHeader[0][8] = "SpeedOverGround";
+		fileHeader[0][9] = "CourseOverGround";
 
 		imTempR = new byte[0][0];
 		imTempL = new byte[0][0];
@@ -199,9 +213,11 @@ public class Extract {
 		Y2K_Address = getAddress("1D01");
 		Nav_Address = getAddress("3401");
 		Fatho_Address = getAddress("2801");
+		SDInfo_Address = getAddress("2A01");
 		Y2KtimeCorrelation();
 		NavInfo6();
 		Fathometer2();
+		SonarDataInfo3();
 	}
 
 	/**
@@ -249,9 +265,24 @@ public class Extract {
 					Data[Data_Count][5] = "" + Nav_Long[i] / 60;
 					Data[Data_Count][6] = "" + Fatho_WaterDepth[j];
 					Data[Data_Count][7] = "" + Fatho_TowfishDepth[j];
+					Data[Data_Count][8] = "" + Nav_SOG[i];
+					Data[Data_Count][9] = "" + Nav_COG[i];
 					Data_Count++;
 					break;
 				}
+			}
+		}
+		
+		SDInfoData = new String[SonarLines][3];
+		for (i = 0; i < SonarLines; i++) {
+			SDInfoData[i][0] = "" + x;
+			try {
+				SDInfoData[i][1] = "" + SDInfo_RangeCode[i];
+				SDInfoData[i][2] = "" + SDInfo_RangeMode[i];
+			} catch(Exception e) {
+				System.out.println("Exception at line "+ e.getStackTrace()[0].getLineNumber() + ": "+ e + "i: "+ i);
+//				System.out.println("Data_Count: "+ Data_Count);
+//				System.out.println("i: "+ i);
 			}
 		}
 
@@ -500,15 +531,20 @@ public class Extract {
 	 * Initialize Nav Info Data
 	 */
 	public static void NavInfo6() {
+		int numOfBytes = 20; // it's (number of fields we want in NavInfo) * (4 bytes)
+		
 		byte[] Nav_info_byte = Arrays.copyOfRange(bytes, Nav_Address, Nav_Address + 560 * NavinfoCount);
-		String[] Nav_HEX = new String[12];
+		String[] Nav_HEX = new String[numOfBytes];
 		String[] Nav_timestamp_Hex = new String[NavinfoCount];
 		String[] Nav_Lat_Hex = new String[NavinfoCount];
 		String[] Nav_Long_Hex = new String[NavinfoCount];
+		String[] Nav_SOG_Hex = new String[NavinfoCount];
+		String[] Nav_COG_Hex = new String[NavinfoCount];
+		
 		int cnt = 0;
 		int i = 0;
 		for (i = 0; i < NavinfoCount; i++) {
-			for (int j = 0; j < 12; j++) {
+			for (int j = 0; j < numOfBytes; j++) {
 				Nav_HEX[j] = Util.toHexFromByte(Nav_info_byte[cnt]);
 				cnt++;
 			}
@@ -518,7 +554,11 @@ public class Extract {
 					+ Nav_HEX[7].toString();
 			Nav_Long_Hex[i] = Nav_HEX[8].toString() + Nav_HEX[9].toString() + Nav_HEX[10].toString()
 					+ Nav_HEX[11].toString();
-			cnt = cnt + 548;
+			Nav_SOG_Hex[i] = Nav_HEX[12].toString() + Nav_HEX[13].toString() + Nav_HEX[14].toString()
+					+ Nav_HEX[15].toString();
+			Nav_COG_Hex[i] = Nav_HEX[16].toString() + Nav_HEX[17].toString() + Nav_HEX[18].toString()
+					+ Nav_HEX[19].toString();
+			cnt = cnt + (560 - numOfBytes);
 		}
 
 		// Navinfo6 : Transform HEX -> Binary -> Long or Float //
@@ -527,6 +567,10 @@ public class Extract {
 		Nav_Lat_tmp = 0;
 		Nav_Long = new float[NavinfoCount];
 		Nav_Long_tmp = 0;
+		Nav_SOG = new float[NavinfoCount];
+		Nav_SOG_tmp = 0;
+		Nav_COG = new float[NavinfoCount];
+		Nav_COG_tmp = 0;
 		Nav_Real_Count = 0;
 		i = 0;
 		int shiftBy = 0;
@@ -534,13 +578,19 @@ public class Extract {
 			Nav_timestamp_byte_tmp = Util.toByteFromHex(Nav_timestamp_Hex[j]);
 			Nav_Lat_byte_tmp = Util.toByteFromHex(Nav_Lat_Hex[j]);
 			Nav_Long_byte_tmp = Util.toByteFromHex(Nav_Long_Hex[j]);
+			Nav_SOG_byte_tmp = Util.toByteFromHex(Nav_SOG_Hex[j]);
+			Nav_COG_byte_tmp = Util.toByteFromHex(Nav_COG_Hex[j]);
 			Nav_Lat_tmp = 0;
 			Nav_Long_tmp = 0;
+			Nav_SOG_tmp = 0;
+			Nav_COG_tmp = 0;
 
 			for (shiftBy = 0; shiftBy < 32; shiftBy += 8) {
 				Nav_timestamp[j] |= ((long) (Nav_timestamp_byte_tmp[i] & 0xff)) << shiftBy;
 				Nav_Lat_tmp |= ((long) (Nav_Lat_byte_tmp[i] & 0xff)) << shiftBy;
 				Nav_Long_tmp |= ((long) (Nav_Long_byte_tmp[i] & 0xff)) << shiftBy;
+				Nav_SOG_tmp |= ((long) (Nav_SOG_byte_tmp[i] & 0xff)) << shiftBy;
+				Nav_COG_tmp |= ((long) (Nav_COG_byte_tmp[i] & 0xff)) << shiftBy;
 				i++;
 			}
 			// stop if abnormal data comes out //
@@ -552,6 +602,8 @@ public class Extract {
 			Nav_Real_Count++;
 			Nav_Lat[j] = Float.intBitsToFloat(Nav_Lat_tmp);
 			Nav_Long[j] = Float.intBitsToFloat(Nav_Long_tmp);
+			Nav_SOG[j] = Float.intBitsToFloat(Nav_SOG_tmp);
+			Nav_COG[j] = Float.intBitsToFloat(Nav_COG_tmp);
 			i = 0;
 		}
 
@@ -632,4 +684,80 @@ public class Extract {
 																					// second //
 		}
 	}
+	/**
+	 * Initialize SonarDataInfo3 data
+	 */
+	public static void SonarDataInfo3() {
+		
+		int numOfBytes = 8;
+		
+		// 6 fields * 4 bytes each - 2 because of gain = 6 * 4 - 2 = 22 bytes of info
+		byte[] SDInfo_info_byte = Arrays.copyOfRange(bytes, SDInfo_Address, SDInfo_Address + 22 * SonarLines); 
+		String[] SDInfo_HEX = new String[12];
+		String[] SDInfo_RangeCode_Hex = new String[SonarLines];
+		SDInfo_RangeMode = new int[SonarLines];
+//		int[] SDInfo_RangeMode_intTmp = new int[SonarLines];
+		int cnt = 0;
+		int i;
+		for (i = 0; i < SonarLines; i++) {
+			for (int j = 0; j < numOfBytes; j++) {
+				SDInfo_HEX[j] = Util.toHexFromByte(SDInfo_info_byte[cnt]);
+				cnt++;
+			}
+			SDInfo_RangeCode_Hex[i] = SDInfo_HEX[4].toString() + SDInfo_HEX[5].toString() + SDInfo_HEX[6].toString()
+					+ SDInfo_HEX[7].toString();
+			
+			SDInfo_RangeMode[i] = Integer.parseInt(SDInfo_HEX[7].toString()+SDInfo_HEX[6].toString(),16);
+			
+			if (SDInfo_RangeMode[i] == 1) SDInfo_RangeMode[i] = 5;
+			else if (SDInfo_RangeMode[i] == 2) SDInfo_RangeMode[i] = 10;
+			else if (SDInfo_RangeMode[i] == 3) SDInfo_RangeMode[i] = 20;
+			else if (SDInfo_RangeMode[i] == 4) SDInfo_RangeMode[i] = 50;
+			else if (SDInfo_RangeMode[i] == 5) SDInfo_RangeMode[i] = 75;
+			else if (SDInfo_RangeMode[i] == 6) SDInfo_RangeMode[i] = 100;
+			else if (SDInfo_RangeMode[i] == 7) SDInfo_RangeMode[i] = 150;
+			else if (SDInfo_RangeMode[i] == 8) SDInfo_RangeMode[i] = 200;
+			else if (SDInfo_RangeMode[i] == 9) SDInfo_RangeMode[i] = 300;
+			else if (SDInfo_RangeMode[i] == 10) SDInfo_RangeMode[i] = 500;
+			else if (SDInfo_RangeMode[i] == 11) SDInfo_RangeMode[i] = 30;
+			else {
+				SDInfo_RangeMode[i] = 40;
+//				System.out.println("SDInfo_RangeMode[j]" + SDInfo_RangeMode[j]);
+			}
+			
+			try {
+				if (i==0) {
+					System.out.println("SDInfo_RangeCode_Hex[1]: " + SDInfo_RangeCode_Hex[1]);
+					System.out.println("SDInfo_RangeMode[1]: " + SDInfo_RangeMode[1]);
+				}
+			} catch(Exception e) {
+				System.out.println("Exception: " + e);
+				System.out.println("i: "+ i);
+				System.out.println("cnt: "+ cnt);
+			}
+			
+			cnt = cnt + (22 - numOfBytes);
+		}
+		
+		SDInfo_RangeCode = new long[SonarLines];
+//		SDInfo_RangeMode = new long[SonarLines];
+		i = 0;
+		int shiftBy;
+		
+		
+		for (int j = 0; j < SonarLines; j++) {
+			SDInfo_RangeCode_byte_tmp = Util.toByteFromHex(SDInfo_RangeCode_Hex[j]);
+
+			for (shiftBy = 0; shiftBy < 32; shiftBy += 8) {
+				SDInfo_RangeCode[j] |= ((long) (SDInfo_RangeCode_byte_tmp[i] & 0xff)) << shiftBy;
+//				SDInfo_RangeMode[j] |= ((long) (SDInfo_RangeCode_byte_tmp[i] & 0xf)) << shiftBy; // find the decimal rangemode by masking the rangecode
+				// find the sonar range in meters
+				
+				i++;
+			}
+			i = 0;
+		}
+		
+	}
+
 }

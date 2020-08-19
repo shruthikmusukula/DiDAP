@@ -52,7 +52,7 @@ public class SonarImage {
 	// later change this to work with any input/output directory that is inputed
 	// through the Linux command line
 	// also have the file be placed in the output folder
-	public static String basePath = "/home/cloudera/Documents/shared/MineProcess/output/";
+	public static String basePath = "/home/cloudera/Host_Exchange/ExtractDetect";
 
 	// file count is attached to name of png
 	public static int count = 0;
@@ -114,7 +114,25 @@ public class SonarImage {
 				}
 				sb.append(j + "\n");
 			}
-			mos.write("metadata", key + "\n", new Text(sb.toString()));
+			mos.write("metadata", key, new Text(sb.toString()));
+			
+			// output SonarDataInfo3 data
+			sb = new StringBuilder();
+
+			String[][] SDInfoarr = Extract.SDInfoData;
+			
+			try {
+				for (int j = 0; j < SDInfoarr.length; j++) {
+					for (int k = 0; k < SDInfoarr[0].length; k++) {
+						sb.append(SDInfoarr[j][k] + ",");
+					}
+					sb.append(j + "\n");
+				}
+			}catch(Exception e){
+				System.out.println("Exception at line " + e.getStackTrace()[0].getLineNumber() + ": " + e);
+				
+			}
+			mos.write("sonardatainfo", key, new Text(sb.toString()));
 
 			// process the image bytes
 			if (right_bytes == null) {
@@ -155,15 +173,16 @@ public class SonarImage {
 					baos.write(imBytes);
 
 					// writes image to vm folder
-					System.out.println(localPath);
+					System.out.println("localPath: " + localPath);
 					File outfile = new File(localPath);
 					ImageIO.write(Util.getImage(Util.combineHorizontally(MacroMaster.imL, MacroMaster.imR), false), "png", outfile);
 
 					// writes image as byte array as SequenceFile to hdfs
-					mos.write("image", key, new BytesWritable(imBytes));
+					mos.write("image", key, new BytesWritable(imBytes), imgPath);
 
 				} catch (IOException e) {
 					e.printStackTrace();
+					System.out.println("issue in printing image: "+ e);
 				} finally {
 					IOUtils.closeStream(writer);
 				}
@@ -189,7 +208,7 @@ public class SonarImage {
 	 */
 	public static class Sonar_Reducer extends Reducer<Text, Text, Text, BytesWritable> {
 
-		public void reduce(Text key, Text value, Context context) throws IOException, InterruptedException {
+		public void reduce(Text key, Iterable<Text> S_tot, Context context) throws IOException, InterruptedException {
 
 		}
 	}
@@ -277,7 +296,7 @@ public class SonarImage {
 	public static void main(String[] args) throws Exception {
 		conf = new Configuration();
 		job = Job.getInstance(conf, "SonarImage");
-		
+		conf.set("mapred.textoutputformat.separator", ",");
 		// allows for Hadoop to find the jar file
 		// by looking at each jar file and seeing if it has the following class in it
 		job.setJarByClass(SonarImage.class);
@@ -295,8 +314,9 @@ public class SonarImage {
 
 		job.setOutputKeyClass(Text.class);
 		
-		// set up 3 outputs, one for metadata, one for sonar image, and one for mine information
+		// set up 4 outputs, one for metadata, one for SonarDataInfo3, one for sonar image, and one for mine information
 		MultipleOutputs.addNamedOutput(job, "metadata", TextOutputFormat.class, Text.class, Text.class);
+		MultipleOutputs.addNamedOutput(job, "sonardatainfo", TextOutputFormat.class, Text.class, Text.class);
 		MultipleOutputs.addNamedOutput(job, "image", SequenceFileOutputFormat.class, Text.class, BytesWritable.class);
 		MultipleOutputs.addNamedOutput(job, "mines", TextOutputFormat.class, Text.class, Text.class);
 		job.setOutputKeyClass(Text.class);
