@@ -10,7 +10,7 @@ public class Runner {
 	private static String prefix;
 
 	public static void main(String[] args) {
-		runDBSequence("test");
+		runDBSequence("banana");
 	}
 
 	public static void runDBSequence(String prefix) {
