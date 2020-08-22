@@ -3,4 +3,4 @@ CREATE TABLE IF NOT EXISTS Metadata.florida
 ROW FORMAT DELIMITED
 FIELDS TERMINATED BY ','
 STORED AS TEXTFILE
-LOCATION '/user/hive/warehouse/metadata.db/florida';
+LOCATION '/user/hive/warehouse/metadata.db';
