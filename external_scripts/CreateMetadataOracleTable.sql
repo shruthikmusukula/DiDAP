@@ -1,4 +1,4 @@
-CREATE TABLE shruthik.Metadata
+CREATE TABLE Metadata
 (
 filePath VARCHAR2(80),
 dateStamp INT,
