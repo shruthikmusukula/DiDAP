@@ -1,4 +1,4 @@
-CREATE TABLE Metadata
+CREATE TABLE <Username>.Metadata
 (
 filePath VARCHAR2(80),
 dateStamp INT,
